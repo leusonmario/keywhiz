@@ -1,3 +1,5 @@
+
+sudo: required
 language: java
 
 jdk:
@@ -22,5 +24,21 @@ before_install:
   - grunt build && cd ..
 
 script:
-  - mvn test findbugs:check jacoco:report coveralls:report -P h2
-  - cd $UI_DIR && grunt test
+
+  - mvn clean cobertura:cobertura -Dtest=AclDAOTest#getSanitizedSecretsForClient -DfailIfNoTests=false
+
+
+before_deploy:
+- tar -zcvf coverage-result.tar.gz /home/travis/build/leusonmario/keywhiz/target/site/cobertura
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "zJcHz4Wf769SGd8xA6oKxa+LEMjEKnwU6Yv51weJ1RorLrRPoDlKutdmfi2nGKuVzUI83MwFkrBvokt0KOuCBYkuMsAHNPexurDP06Qcrn8O2GNL+vzy7NDvN0I2fD+MtZaYMbemvlns2WArhvmMzaFK6YjgVgJj9zE6cbXfqj5Btnt4iALHrVgbKFxa7VcNGTxAXCuUswwHpwkzK7KHcYLjky1iYmFaa+gaDhtAkD7eCacEFG/VPw7pKrdWd/XzPGQoivu69NZVJxgRviN4lSft+hLkM/boIaU8aiATOGQTZ2XNkDKM9cz0DzGumcRHVk12afJAKu0S33Hsp3E1CjxliEa+c0ACiBBzS+xk5NqPDVFBtazQT6RpwQlazyqVwEen2SFVklDX1GmadTF7YUDU4kk+whyfboZE3TUVdgKjdQHHr4xoHkNl6JadQxjaUjMOguWb4JFf3i30olTHo4HeGwGmTL3aXt02TbHsgb5s17R4VUT0J+TjQmXkeQsZ8CGfOKdRb+DvmV0EpMKPGH95bprhB8tIvw+H3uY9wsj+hszysZkjpj5uQ4kF+N9VEuZfY1jmiRF83GDg8SyyE5ypM23pe7zDxL7O5mYsIyX8ba7Y/+7LoVFMiUdWo4SdPIkOxNUTq8znT0fj0iNfRgmV/D6PqgdU9HqXq27w9K4="
+
+  file: coverage-result.tar.gz
+  file_glob: true
+  overwrite: true
+  skip_cleanup: true
+  on:
+    tags: true
