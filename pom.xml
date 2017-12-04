@@ -426,7 +426,18 @@
           </execution>
         </executions>
       </plugin>
-    </plugins>
+    <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>cobertura-maven-plugin</artifactId>
+          <version>2.7</version>
+          <configuration>
+              <format>xml</format>
+              <maxmem>256m</maxmem>
+              <!-- aggregated reports for multi-module projects -->
+              <aggregate>true</aggregate>
+          </configuration>
+         </plugin>
+        </plugins>
 
     <pluginManagement>
       <plugins>
@@ -493,6 +504,7 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.14.1</version>
           <configuration>
+<testFailureIgnore>true</testFailureIgnore>
             <!-- passing timezone in argLine instead of in systemPropertyVariables to make it work for java 8 -->
             <argLine>${argLine} -Duser.timezone=UTC</argLine>
           </configuration>
@@ -629,7 +641,18 @@ Place the jars in this directory: `/usr/libexec/java_home -v
           <artifactId>copy-rename-maven-plugin</artifactId>
           <version>1.0</version>
         </plugin>
-      </plugins>
+      <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>cobertura-maven-plugin</artifactId>
+          <version>2.7</version>
+          <configuration>
+              <format>xml</format>
+              <maxmem>256m</maxmem>
+              <!-- aggregated reports for multi-module projects -->
+              <aggregate>true</aggregate>
+          </configuration>
+         </plugin>
+        </plugins>
     </pluginManagement>
   </build>
 </project>
